@@ -1,11 +1,11 @@
 # Python Domeneshop DynDns script
-domeneshop dyndns update script compatible for VyOS 1.2
-This is based upon https://github.com/domeneshop/python-domeneshop but modified to run under VyOS 1.2 and python3.4.2
+domeneshop dyndns update script compatible for VyOS 1.2.
+This is based upon https://github.com/domeneshop/python-domeneshop but modified to run under VyOS 1.2 and python3.4.2.
 
 ## Install
 put domeneshop-dyndns.py under /config/scripts and make it excecutable
 ```
-chmod + x /config/scripts/domeneshop-dyndns.py
+chmod +x /config/scripts/domeneshop-dyndns.py
 ```
 
 ## VyOS config

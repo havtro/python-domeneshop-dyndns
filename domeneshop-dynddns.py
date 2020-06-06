@@ -7,34 +7,8 @@ import urllib3
 import base64
 
 import argparse
-import sys
-import getopt
 
 logger = logging.getLogger(__name__)
-
-VALID_TYPES = [
-    "A",
-    "AAAA",
-    "CNAME",
-    "ANAME",
-    "TLSA",
-    "MX",
-    "SRV",
-    "DS",
-    "CAA",
-    "NS",
-    "TXT",
-]
-
-COMMON_KEYS = {"host", "data", "ttl", "type"}
-
-VALID_KEYS = {
-    "MX": {"priority"},
-    "SRV": {"priority", "weight", "port"},
-    "TLSA": {"usage", "selector", "dtype"},
-    "DS": {"tag", "alg", "digest"},
-    "CAA": {"flags", "tag"},
-}
 
 
 class Client:
@@ -132,24 +106,6 @@ class DomeneshopError(Exception):
         super().__init__(error_message)
 
 
-def _validate_record(record: dict):
-    record_keys = set(record.keys())
-    record_type = record.get("type")
-
-    if record_type not in VALID_TYPES:
-        raise TypeError(
-            "Record has invalid type. Valid types: {0}".format(VALID_TYPES))
-
-    required_keys = COMMON_KEYS | VALID_KEYS.get(record_type, set())
-
-    if record_keys != required_keys:
-        raise TypeError(
-            "Record is missing or has invalid keys. Required keys: {0}".format(
-                required_keys
-            )
-        )
-
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="Domeneshop dynamic dns parser")
@@ -169,8 +125,10 @@ if __name__ == "__main__":
     # verify domain
     domains = client.get_domains()
     id = None
+    base_domain = args.domain_name.replace(
+        args.domain_name.split(".")[0]+".", "")
     for domain in domains:
-        if domain["domain"] == "havtro.net":
+        if domain["domain"] == base_domain:
             id = domain["id"]
             break
 
